@@ -40,7 +40,6 @@ RECOMMEND_PLAYLIST = {
     "0s4S7bzYygOGXEzF1a8c4f": [-3, 0, -3, 0, 2, 0, 0, -2, -2, 0],
     "0axQfChvnswvoQUpBTSomE": [-1, 3, -3, 0, 1, 0, 0, 1, 3, 0],
     "3mBDzf6mlMOdtaYUyv2pSP": [-3, 3, -2, 0, 3, 0, -2, 3, 5, 0],
-    "55eIdvGgMMauK2wxmHrRwF": [0, 3, 0, 0, 5, 0, 0, 2, 3, 0],
     "2kvS4vbHe5X9VSpyrvfPmg": [2, 1, 1, 0, 2, 1, -2, -2, -3, 0],
     "3UjF48ermq8mvO5m5PGjg4?si=135a86d81fc449f9&nd=1": [-5, 4, 2, 3, 0, -4, 3, 0, 5, 0],
     "4jGnTsYCkQh5OiVUpocHOC?si=8170c15fa6d044c6": [-3, 3, -3, 4, 3, 0, -3, 2, 2, 0],
@@ -108,38 +107,18 @@ def show():
     else: 
       book_vector = [0,2,4,1,1,0,0,0,2,1]
     #本とカテゴリの類似度計算
-    cos_1 = 0
-    cos_2 = 0
-    playlist_id_1 = ""
-    playlist_id_2 = ""
+    cos = 0
+    playlist_id = ""
     for id, music_vector in RECOMMEND_PLAYLIST.items():
-      if cos_1 == 0 or cos_2 == 0:
-          if cos_1 == 0:
-            cos_1 = calulate_cos(book_vector,music_vector)
-            playlist_id_1 = id
-          else:
-            cos_2 = calulate_cos(book_vector,music_vector)
-            playlist_id_2 = id
-            if cos_2 > cos_1:
-              cos_1,cos_2 = cos_2,cos_1
-              playlist_id_1,playlist_id_2 = playlist_id_2, playlist_id_1
-      else:
-        if cos_1 < calulate_cos(book_vector,music_vector):
-          cos_2 = cos_1
-          playlist_id_2 = playlist_id_1
-          cos_1 = calulate_cos(book_vector,music_vector)
-          playlist_id_1 = id
-        elif cos_2 < calulate_cos(book_vector,music_vector):
-          cos_2 = calulate_cos(book_vector,music_vector)
-          playlist_id_2 = id
-
+        if cos < calulate_cos(book_vector,music_vector):
+            cos = calulate_cos(book_vector,music_vector)
+            playlist_id = id
     #spotify APIにplaylist_idを渡す
-    music_data_1 = get_songs_from_playlist(playlist_id_1)
-    music_data_2 = get_songs_from_playlist(playlist_id_2)
-    song_name_1, artist_1, ref_1, music_image_1 = music_data_1[0]  
-    song_name_2, artist_2, ref_2, music_image_2 = music_data_1[1] 
-    song_name_3, artist_3, ref_3, music_image_3 = music_data_2[0] 
-    song_name_4, artist_4, ref_4, music_image_4 = music_data_2[1] 
+    music_data = get_songs_from_playlist(playlist_id)
+    song_name_1, artist_1, ref_1, music_image_1 = music_data[0]  
+    song_name_2, artist_2, ref_2, music_image_2 = music_data[1] 
+    song_name_3, artist_3, ref_3, music_image_3 = music_data[2] 
+    song_name_4, artist_4, ref_4, music_image_4 = music_data[3] 
     return render_template('result.html',
     title=title,url=url,book_large_image=book_large_image,book_medium_image=book_medium_image,book_small_image=book_small_image,author=author,review=review,price_yen=price_yen,publish_name=publish_name,
     song_name_1=song_name_1,artist_1=artist_1,ref_1=ref_1,music_image_1=music_image_1,
