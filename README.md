@@ -1,5 +1,7 @@
 # MediaDo Tech Internship2021 ヘビーユーザー(c_team)
 
+:mega:Heroku無償枠終了につきコンテナは削除しました
+
 ## Overview
 - Dockerfile  
 コンテナイメージ管理
